@@ -18,15 +18,44 @@ app.get("/", function (req, res) {
   res.sendFile(__dirname + '/views/index.html');
 });
 
-
 // your first API endpoint... 
-app.get("/api/hello", function (req, res) {
-  res.json({greeting: 'hello API'});
+app.get("/api", function (req, res) {
+  const d = new Date().toUTCString()
+  const d1 = new Date()
+  const t = d1.getTime()
+  res.status(200).json({unix: t,  utc: d})
 });
+
+app.get('/api/:ans', (req,res) => {
+  const rest = req.params.ans.split("-")
+  let date = new Date(req.params.ans).toDateString().split(" ")
+  let date2 = new Date(req.params.ans)
+  console.log()
+
+  if (!Number(date2) && !Number(req.params.ans)) {
+    return res.status(404).json({error: "Invalid Date"})
+  }
+
+  else if (rest.length > 1) {
+
+    const dateString = (`${date[0]}, ${date[1]} ${date[2]} ${date[3]} 00:00:00 GMT`)
+    const stamp = date2.getTime()
+    let object = {unix: stamp, utc: dateString}
+    return res.status(200).json(object)
+
+  } else {
+    let unixDate = new Date(Number(req.params.ans))
+    unixDate = unixDate.toDateString().split(" ")
+    let dateStr = (`${unixDate[0]}, ${unixDate[1]} ${unixDate[2]} ${unixDate[3]} 00:00:00 GMT`)
+    let object2 = {unix: Number(req.params.ans), utc: dateStr}
+    return res.status(200).json(object2)
+
+  }
+})
 
 
 
 // listen for requests :)
-var listener = app.listen(process.env.PORT, function () {
-  console.log('Your app is listening on port ' + listener.address().port);
+var listener = app.listen(5000, function () {
+  console.log('Your app is listening on port 5000');
 });
