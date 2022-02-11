@@ -30,6 +30,7 @@ app.get('/api/:ans', (req,res) => {
   const rest = req.params.ans.split("-")
   let date = new Date(req.params.ans).toUTCString()
   let date2 = new Date(req.params.ans)
+  console.log()
 
   if (!Number(date2) && !Number(req.params.ans)) {
     return res.status(404).json({error: "Invalid Date"})
